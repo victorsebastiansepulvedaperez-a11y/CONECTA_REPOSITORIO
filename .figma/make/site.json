@@ -1,0 +1,10 @@
+{
+  "description": "CONECTA PRO offers a socio-emotional support platform for educational communities, fostering emotional intelligence and well-being through a user-friendly interface.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

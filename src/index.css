@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import 'tailwindcss';
+
+/* ─── Figma-import font aliases ────────────────────────────────────────── */
+/* Resolved via figma fonts resolve. Inter:Regular and Inter:Italic resolved
+   to https://static.figma.com/font/Inter_1 (woff2). All other faces
+   (Liberation Serif:Regular, FreeSans:Regular, Nimbus Sans:Regular,
+   Nimbus Sans:Bold, Liberation Mono:Regular, Liberation Mono:Bold) were
+   blocked with reason "not_found" — no @font-face is declared for those
+   cssFamilies; imports fall back to their declared sans-serif/monospace. */
+
+@font-face {
+  font-family: 'Inter:Regular';
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Inter:Italic';
+  src: url('https://static.figma.com/font/Inter_1') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Additional Inter weight aliases used by Figma imports — sourced from
+   the already-loaded Google Fonts Inter (no extra network request). */
+@font-face { font-family: 'Inter:Medium';     src: local('Inter Medium'), local('Inter'); font-style: normal; font-weight: 500; }
+@font-face { font-family: 'Inter:Semi_Bold';  src: local('Inter SemiBold'), local('Inter'); font-style: normal; font-weight: 600; }
+@font-face { font-family: 'Inter:Bold';       src: local('Inter Bold'), local('Inter'); font-style: normal; font-weight: 700; }
+@font-face { font-family: 'Inter:Extra_Bold'; src: local('Inter ExtraBold'), local('Inter'); font-style: normal; font-weight: 800; }
+
+/* ─── CONECTA PRO · Design Tokens ─────────────────────────────────────── */
+
+@theme inline {
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Brand Blue (Primary) */
+  --color-cp-blue-50:  #EEF2FF;
+  --color-cp-blue-100: #E0E7FF;
+  --color-cp-blue-200: #C7D2FE;
+  --color-cp-blue-300: #A5B4FC;
+  --color-cp-blue-400: #818CF8;
+  --color-cp-blue-500: #4F67F5;
+  --color-cp-blue-600: #3251E8;
+  --color-cp-blue-700: #2640C8;
+  --color-cp-blue-800: #1E32A0;
+  --color-cp-blue-900: #172580;
+
+  /* Brand Teal (Secondary — Wellbeing) */
+  --color-cp-teal-50:  #F0FDFA;
+  --color-cp-teal-100: #CCFBF1;
+  --color-cp-teal-200: #99F6E4;
+  --color-cp-teal-300: #5EEAD4;
+  --color-cp-teal-400: #2DD4BF;
+  --color-cp-teal-500: #14B8A6;
+  --color-cp-teal-600: #0D9488;
+  --color-cp-teal-700: #0F766E;
+  --color-cp-teal-800: #115E59;
+  --color-cp-teal-900: #134E4A;
+
+  /* Brand Violet (Accent — Emotional Intelligence) */
+  --color-cp-violet-50:  #F5F3FF;
+  --color-cp-violet-100: #EDE9FE;
+  --color-cp-violet-200: #DDD6FE;
+  --color-cp-violet-300: #C4B5FD;
+  --color-cp-violet-400: #A78BFA;
+  --color-cp-violet-500: #8B5CF6;
+  --color-cp-violet-600: #7C3AED;
+  --color-cp-violet-700: #6D28D9;
+  --color-cp-violet-800: #5B21B6;
+  --color-cp-violet-900: #4C1D95;
+
+  /* Neutrals */
+  --color-cp-neutral-0:   #FFFFFF;
+  --color-cp-neutral-50:  #F8F9FF;
+  --color-cp-neutral-100: #F1F3FA;
+  --color-cp-neutral-200: #E4E7F0;
+  --color-cp-neutral-300: #CBD0DC;
+  --color-cp-neutral-400: #9AA1B2;
+  --color-cp-neutral-500: #6B7280;
+  --color-cp-neutral-600: #4B5563;
+  --color-cp-neutral-700: #374151;
+  --color-cp-neutral-800: #1F2937;
+  --color-cp-neutral-900: #111827;
+  --color-cp-neutral-950: #0A0F1A;
+
+  /* Semantic */
+  --color-cp-success-light: #ECFDF5;
+  --color-cp-success:       #10B981;
+  --color-cp-success-dark:  #065F46;
+
+  --color-cp-warning-light: #FFFBEB;
+  --color-cp-warning:       #F59E0B;
+  --color-cp-warning-dark:  #92400E;
+
+  --color-cp-danger-light:  #FFF1F2;
+  --color-cp-danger:        #F43F5E;
+  --color-cp-danger-dark:   #881337;
+
+  --color-cp-info-light:    #EFF6FF;
+  --color-cp-info:          #3B82F6;
+  --color-cp-info-dark:     #1E3A8A;
+
+  /* Emotion palette */
+  --color-emotion-joy:       #FCD34D;
+  --color-emotion-calm:      #6EE7B7;
+  --color-emotion-sadness:   #93C5FD;
+  --color-emotion-anger:     #FCA5A5;
+  --color-emotion-anxiety:   #F9A8D4;
+  --color-emotion-surprise:  #C4B5FD;
+  --color-emotion-fear:      #A5B4FC;
+  --color-emotion-boredom:   #D1D5DB;
+
+  /* Spacing scale */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border radius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(16, 24, 40, 0.1), 0 1px 2px -1px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(16, 24, 40, 0.08), 0 2px 4px -2px rgba(16, 24, 40, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(16, 24, 40, 0.08), 0 4px 6px -4px rgba(16, 24, 40, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(16, 24, 40, 0.1), 0 8px 10px -6px rgba(16, 24, 40, 0.04);
+
+  /* Brand shadow (colored) */
+  --shadow-primary: 0 4px 14px 0 rgba(79, 103, 245, 0.25);
+  --shadow-teal:    0 4px 14px 0 rgba(13, 148, 136, 0.22);
+  --shadow-violet:  0 4px 14px 0 rgba(124, 58, 237, 0.22);
+}
+
+/* ─── Global base ──────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cp-neutral-50);
+  color: var(--color-cp-neutral-900);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Utility overrides ────────────────────────────────────────────────── */
+
+/* Hide scrollbar by default, show on hover */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-cp-neutral-300); border-radius: 99px; opacity: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-cp-neutral-400); }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-cp-blue-500);
+  outline-offset: 2px;
+}
+
+/* Transition defaults */
+.transition-cp {
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
