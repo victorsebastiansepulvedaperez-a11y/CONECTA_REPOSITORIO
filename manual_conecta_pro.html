@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Manual de usuario - CONECTA PRO</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #e9edf5; color: #172033; font-family: Arial, Helvetica, sans-serif; font-size: 11pt; line-height: 1.45; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto 12px; padding: 18mm 18mm 16mm; background: white; position: relative; page-break-after: always; overflow: hidden; }
+    .page:last-child { page-break-after: auto; }
+    .cover { color: white; background: linear-gradient(145deg, #161d42 0%, #30276e 52%, #725ccf 100%); display: flex; flex-direction: column; justify-content: space-between; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 9pt; font-weight: bold; color: #6c63d9; }
+    .cover .eyebrow { color: #c5c9ff; }
+    h1 { margin: 8px 0 12px; font-size: 34pt; line-height: 1.05; letter-spacing: -.04em; }
+    h2 { margin: 0 0 8px; font-size: 23pt; letter-spacing: -.035em; color: #1c2650; }
+    h3 { margin: 0 0 7px; font-size: 14pt; color: #273364; }
+    p { margin: 0 0 10px; }
+    .lead { font-size: 14pt; color: #dce2ff; max-width: 145mm; }
+    .muted { color: #65708a; }
+    .rule { height: 3px; width: 38mm; background: #7165dc; margin: 10px 0 18px; }
+    .cover .rule { background: #b7afff; }
+    .meta { border-top: 1px solid rgba(255,255,255,.25); padding-top: 12px; color: #d8dcff; display: flex; justify-content: space-between; }
+    .toc { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 18px; }
+    .toc div, .card { border: 1px solid #dfe4f0; border-radius: 12px; padding: 12px; background: #f8faff; }
+    .toc b { display: block; color: #28336d; }
+    .toc span { color: #6a7590; font-size: 9.5pt; }
+    .section-tag { display: inline-block; padding: 5px 9px; border-radius: 999px; background: #eeeaff; color: #564ab4; font-size: 9pt; font-weight: bold; text-transform: uppercase; letter-spacing: .12em; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .feature { border-left: 4px solid #7669db; padding: 10px 12px; background: #f5f6ff; border-radius: 0 10px 10px 0; margin: 10px 0; }
+    .feature strong { color: #303a79; }
+    ul { margin: 7px 0 0; padding-left: 19px; }
+    li { margin: 4px 0; }
+    .flow { display: flex; align-items: center; gap: 6px; margin: 15px 0; }
+    .step { flex: 1; text-align: center; background: #eef0ff; border: 1px solid #cfd3fa; border-radius: 10px; padding: 10px 6px; font-size: 9.5pt; font-weight: bold; }
+    .arrow { color: #756ad3; font-size: 16pt; }
+    .mock { border-radius: 14px; background: #151b30; color: white; padding: 13px; box-shadow: 0 7px 20px rgba(24,31,66,.15); }
+    .mock-head { display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #3b4568; font-size: 9pt; color: #cbd3ff; }
+    .mock-title { font-size: 17pt; font-weight: bold; margin: 12px 0; }
+    .mock-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
+    .mock-tile { background: #222b48; border: 1px solid #3d4770; border-radius: 8px; padding: 10px 7px; min-height: 52px; font-size: 8.5pt; }
+    .mock-tile b { display: block; color: #fff; font-size: 13pt; }
+    .mock-row { display: flex; justify-content: space-between; border-bottom: 1px solid #333d5d; padding: 8px 2px; font-size: 9pt; }
+    .qr { width: 72px; height: 72px; background: repeating-conic-gradient(#111 0 25%, #fff 0 50%) 50% / 14px 14px; border: 7px solid white; }
+    .callout { border-radius: 12px; padding: 12px 14px; background: #fff7de; border: 1px solid #f0d889; color: #51451c; }
+    .callout.blue { background: #eaf2ff; border-color: #c5dafa; color: #243c65; }
+    .callout.green { background: #eaf9f1; border-color: #bde8ce; color: #245b3a; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9.5pt; }
+    th { text-align: left; background: #252e68; color: white; padding: 8px; }
+    td { border: 1px solid #dce1ec; padding: 8px; vertical-align: top; }
+    .footer { position: absolute; bottom: 8mm; left: 18mm; right: 18mm; display: flex; justify-content: space-between; color: #8992a8; font-size: 8.5pt; border-top: 1px solid #e1e5ee; padding-top: 6px; }
+    .page-no:after { counter-increment: page; content: counter(page); }
+    @media print { body { background: white; } .page { margin: 0; } }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <div>
+      <div class="eyebrow">Guia institucional de uso</div>
+      <h1>CONECTA<br>PRO</h1>
+      <div class="rule"></div>
+      <p class="lead">Manual de usuario de la plataforma de bienestar, convivencia y seguimiento escolar.</p>
+      <p style="margin-top:28px;color:#cbd2ff">Version funcional 2026 · Colegio Chile Norte</p>
+    </div>
+    <div>
+      <div class="callout blue" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff">
+        <b>Objetivo</b><br>Conectar a docentes, estudiantes, directivos, dupla psicosocial y apoderados con informacion accionable y segura.
+      </div>
+        <div class="meta"><span>RBD 12412-4</span><span>3 septiembre 2026</span></div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Inicio</span>
+    <h2>Como usar este manual</h2><div class="rule"></div>
+    <p>El documento esta organizado por perfil. Cada pagina describe el objetivo de la pantalla, los datos que presenta y las acciones disponibles. Los nombres y cifras corresponden a datos demostrativos de la version funcional.</p>
+    <div class="grid2" style="margin-top:18px">
+      <div class="card"><h3>Perfiles incluidos</h3><ul><li><b>Docente:</b> aula, asistencia, clima y Kudos.</li><li><b>Estudiante:</b> bienestar, medallas, ideas y orientacion.</li><li><b>Directivo:</b> datos, configuracion y reportes.</li><li><b>Dupla psicosocial:</b> casos, riesgos y atenciones.</li><li><b>Apoderado:</b> resumen, alertas y acompanamiento.</li></ul></div>
+      <div class="card"><h3>Reglas de seguridad</h3><ul><li>Usar la cuenta y rol asignados.</li><li>No compartir claves temporales ni enlaces de kiosco.</li><li>Tratar alertas y registros emocionales como informacion confidencial.</li><li>Cerrar sesion al finalizar en equipos compartidos.</li></ul></div>
+    </div>
+    <h3 style="margin-top:25px">Indice de pantallas</h3>
+    <div class="toc">
+      <div><b>01 · Docente</b><span>Dashboard, asistencia y kiosco, Kudos, Chat, ideas</span></div>
+      <div><b>02 · Estudiante</b><span>Resumen, medallas, Kudos, ideas y Chat Estrella</span></div>
+      <div><b>03 · Directivo</b><span>Carga, carga manual, configuracion, auditoria, alertas y reportes</span></div>
+      <div><b>04 · Dupla psicosocial</b><span>Casos, seguimiento, atenciones, riesgos, documentos y alertas</span></div>
+      <div><b>05 · Apoderado</b><span>Resumen, notificaciones, Kudo Wall, clima, recursos e ideas</span></div>
+      <div><b>06 · Flujos transversales</b><span>Emociones, alertas, moderacion, privacidad y soporte</span></div>
+    </div>
+    <div class="footer"><span>CONECTA PRO · Manual de usuario</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil docente · 01</span>
+    <h2>Dashboard docente</h2><div class="rule"></div>
+    <div class="grid2">
+      <div><p>Es la vista de inicio para gestionar el dia de clases. Resume el estado de asistencia, clima emocional y reconocimientos del curso.</p><div class="feature"><strong>Acciones:</strong> revisar indicadores, identificar alumnos que requieren atencion y acceder al recetario o a recursos rapidos.</div><ul><li>Check-ins realizados.</li><li>Temperatura emocional del curso.</li><li>Medallas y Kudos entregados.</li><li>Recomendaciones pedagogicas.</li></ul></div>
+      <div class="mock"><div class="mock-head"><span>Panel docente</span><span>7° Basico A</span></div><div class="mock-title">Hola, Prof. Omar Lobos</div><div class="mock-grid"><div class="mock-tile">Check-ins hoy<b>23</b></div><div class="mock-tile">Clima positivo<b>74%</b></div><div class="mock-tile">Medallas dadas<b>24</b></div></div><div class="mock-row"><span>Temperatura emocional</span><b style="color:#a9e6bc">Positiva</b></div><div class="mock-row"><span>Atencion individual</span><b style="color:#ffd67a">6 alumnos</b></div></div>
+    </div>
+    <h3 style="margin-top:24px">Navegacion disponible</h3>
+    <table><tr><th>Modulo</th><th>Uso principal</th></tr><tr><td>Asistencia</td><td>Seleccionar curso, abrir kiosco y consultar clima y lista.</td></tr><tr><td>Kudos</td><td>Autorizar felicitaciones y reconocer a estudiantes.</td></tr><tr><td>Chat Estrella</td><td>Consultar orientaciones para el bienestar del aula.</td></tr><tr><td>Caja de Ideas</td><td>Recibir propuestas clasificadas por convivencia, bienestar y academia.</td></tr></table>
+    <div class="footer"><span>Perfil docente</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil docente · 02</span>
+    <h2>Asistencia, QR y kiosco</h2><div class="rule"></div>
+    <p>El docente selecciona el curso y habilita una sesion de toma de lista. La clave provisoria se entrega al profesor autenticado y el QR permite abrir el kiosco en varios dispositivos.</p>
+    <div class="flow"><div class="step">1. Seleccionar curso</div><span class="arrow">→</span><div class="step">2. Generar clave y QR</div><span class="arrow">→</span><div class="step">3. Estudiantes registran emocion</div><span class="arrow">→</span><div class="step">4. Cerrar y revisar</div></div>
+    <div class="grid2">
+      <div class="mock"><div class="mock-head"><span>Asistencia · 7° Basico A</span><span>08:30</span></div><div style="display:flex;gap:14px;align-items:center;margin:13px 0"><div class="qr"></div><div><div style="font-size:9pt;color:#aeb8dd">Clave provisoria</div><div style="font-size:20pt;font-weight:bold">CK-4F7A9M</div><div style="font-size:8pt;color:#aeb8dd">Kiosco activo · multiples dispositivos</div></div></div><div class="mock-row"><span>Registrados</span><b>28 / 32</b></div><div class="mock-row"><span>Clima del curso</span><b style="color:#a9e6bc">74% positivo</b></div></div>
+      <div><h3>Pasos del docente</h3><ol><li>Elegir <b>7°A</b> u <b>8°B</b> desde el menu de asistencia.</li><li>Compartir el QR en la pantalla o la clave en forma privada.</li><li>Abrir el popup del kiosco si necesita apoyar el registro.</li><li>Finalizar la toma de lista para consolidar emociones.</li><li>Reactivar un alumno oculto cuando se detecte un registro equivocado.</li></ol><div class="callout" style="margin-top:12px"><b>Importante:</b> la clave debe renovarse y no debe publicarse fuera de la sesion del curso.</div></div>
+    </div>
+    <h3 style="margin-top:22px">Resultado consolidado</h3>
+    <p>Al cerrar la lista, se muestra el clima del curso y el listado diario con nombre, estado, emocion registrada y hora. Los registros negativos acumulados alimentan el seguimiento psicosocial.</p>
+    <div class="footer"><span>Perfil docente · Asistencia</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil docente · 03</span>
+    <h2>Kudos y recetario pedagogico</h2><div class="rule"></div>
+    <div class="grid2">
+      <div><h3>Moderacion de Kudos</h3><p>El docente revisa las felicitaciones enviadas por estudiantes de su curso. Puede aprobarlas o rechazarlas antes de que aparezcan en el muro.</p><div class="card"><b>Francisco para Sofia</b><p class="muted">"Gracias por ayudarme con el ejercicio de fisica."</p><span class="section-tag">Pendiente de autorizacion</span></div><div class="feature"><strong>Tambien puede:</strong> enviar felicitaciones directas, entregar medallas y revisar el avance colectivo del curso.</div></div>
+      <div><h3>Recetario MINEDUC</h3><p>Ofrece recomendaciones segun la lectura del clima del curso.</p><div class="card"><b>Prioridad alta</b><p>Si los estados criticos superan el 10%, notificar a la dupla y aplicar una intervencion focalizada.</p><hr><b>Pausa activa</b><p class="muted">Respiracion de 3 minutos para estabilizar la energia del grupo.</p><hr><b>Circulo de dialogo</b><p class="muted">Conversacion guiada para resolver tensiones.</p></div></div>
+    </div>
+    <h3 style="margin-top:25px">Uso recomendado</h3><div class="grid3"><div class="card"><b>Observar</b><p class="muted">Leer tendencias antes de intervenir.</p></div><div class="card"><b>Actuar</b><p class="muted">Aplicar una dinamica breve y pertinente.</p></div><div class="card"><b>Reconocer</b><p class="muted">Reforzar avances con Kudos.</p></div></div>
+    <div class="footer"><span>Perfil docente · Kudos y recursos</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil estudiante</span>
+    <h2>Resumen, medallas y Kudos</h2><div class="rule"></div>
+    <p>El estudiante consulta su progreso y participa en una cultura de reconocimiento positivo. Solo visualiza sus medallas ganadas y el avance general del curso.</p>
+    <div class="grid2">
+      <div class="mock"><div class="mock-head"><span>Portal del estudiante</span><span>7° Basico A</span></div><div class="mock-title">Hola, Sofia Carvajal</div><div class="mock-grid"><div class="mock-tile">Asistencia<b>96%</b></div><div class="mock-tile">Medallas<b>8</b></div><div class="mock-tile">Kudos<b>120</b></div></div><div class="mock-row"><span>Progreso del curso</span><b style="color:#a9e6bc">Nivel 3</b></div><div class="mock-row"><span>Premio colectivo</span><b style="color:#ffd67a">68%</b></div></div>
+      <div><h3>Funciones</h3><ul><li>Ver medallas propias y motivo de cada reconocimiento.</li><li>Enviar una felicitacion a un companero.</li><li>Consultar el estado pendiente, aprobado o rechazado de un Kudo.</li><li>Participar en metas y premios del curso.</li><li>Enviar ideas a la comunidad escolar.</li></ul><div class="callout blue" style="margin-top:14px"><b>Moderacion:</b> toda felicitacion enviada por estudiantes requiere autorizacion docente.</div></div>
+    </div>
+    <h3 style="margin-top:25px">Registro emocional y Chat Estrella</h3><p>El kiosco permite registrar la emocion del dia. En Chat Estrella, el estudiante puede conversar con una consejera virtual y recibir sugerencias de bienestar.</p>
+    <div class="footer"><span>Perfil estudiante</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil directivo</span>
+    <h2>Gestion institucional y trazabilidad</h2><div class="rule"></div>
+    <p>El panel directivo concentra la informacion institucional y permite controlar la calidad de los datos, permisos y reportes.</p>
+    <div class="grid2"><div class="card"><h3>Operaciones de datos</h3><ul><li><b>Carga de datos:</b> importar alumnos, docentes, apoderados y dupla desde SIGE o CSV.</li><li><b>Carga manual:</b> editar entidades y revisar campos obligatorios.</li><li><b>Configuracion:</b> administrar roles, sincronizacion, plantillas y notificaciones.</li></ul></div><div class="card"><h3>Control institucional</h3><ul><li><b>Auditoria:</b> consultar usuario, entidad, accion, fecha y estado.</li><li><b>Alertas por curso:</b> comparar riesgo, alumnos y casos abiertos.</li><li><b>Reportes:</b> consolidar resultados para seguimiento directivo.</li></ul></div></div>
+    <div class="mock" style="margin-top:17px"><div class="mock-head"><span>Panel directivo</span><span>Actualizado hoy</span></div><div class="mock-title">Monitoreo institucional</div><div class="mock-grid"><div class="mock-tile">Alumnos<b>347</b></div><div class="mock-tile">Cursos<b>12</b></div><div class="mock-tile">Casos abiertos<b>12</b></div></div><div class="mock-row"><span>Ultima sincronizacion SIGE</span><b style="color:#a9e6bc">Validada</b></div><div class="mock-row"><span>Auditoria reciente</span><b>AUD-1104</b></div></div>
+    <div class="footer"><span>Perfil directivo</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil dupla psicosocial</span>
+    <h2>Casos, riesgos y atenciones</h2><div class="rule"></div>
+    <p>La dupla visualiza informacion sensible de bienestar y convivencia para realizar derivaciones, seguimiento y cierre de casos con acceso especializado.</p>
+    <div class="grid2"><div class="mock"><div class="mock-head"><span>Centro de casos psicosociales</span><span>Acceso especializado</span></div><div class="mock-title">Alertas de convivencia y bienestar</div><div class="mock-grid"><div class="mock-tile">Bullying<b>8</b></div><div class="mock-tile">Desercion<b>5</b></div><div class="mock-tile">Seguimientos<b>12</b></div></div><div class="mock-row"><span>Exclusion reiterada</span><b style="color:#ffd67a">En revision</b></div><div class="mock-row"><span>Reporte anonimo</span><b style="color:#ff9da7">Derivada</b></div></div><div><h3>Menu de trabajo</h3><ul><li><b>Casos:</b> ficha y estado de cada estudiante.</li><li><b>Seguimiento:</b> hitos, responsables y proximas acciones.</li><li><b>Atenciones:</b> entrevistas, acuerdos y apoyos.</li><li><b>Riesgos:</b> niveles y factores priorizados.</li><li><b>Documentos:</b> respaldos y antecedentes.</li><li><b>Alertas:</b> registros que requieren respuesta.</li></ul></div></div>
+    <div class="callout" style="margin-top:20px"><b>Confidencialidad:</b> los reportes de bullying anonimo y las atenciones deben gestionarse solo dentro del equipo autorizado.</div>
+    <div class="footer"><span>Perfil dupla psicosocial</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil apoderado</span>
+    <h2>Resumen y notificaciones</h2><div class="rule"></div>
+    <p>El portal presenta una vista clara del avance del estudiante y las comunicaciones relevantes provenientes de la comunidad escolar y la dupla psicosocial.</p>
+    <div class="grid2"><div class="mock"><div class="mock-head"><span>Portal del apoderado</span><span>Benjamin Perez</span></div><div class="mock-title">Resumen del estudiante</div><div class="mock-grid"><div class="mock-tile">Rendimiento<b>89%</b></div><div class="mock-tile">Asistencia<b>96%</b></div><div class="mock-tile">Kudos<b>120</b></div></div><div class="mock-row"><span>Estado</span><b style="color:#a9e6bc">Estudiante regular</b></div><div class="mock-row"><span>Notificaciones</span><b style="color:#ffd67a">3 nuevas</b></div></div><div><h3>Tipos de aviso</h3><div class="card"><b style="color:#9a7518">Citacion</b><p class="muted">Fecha, hora y motivo de reunion.</p><b style="color:#6655ba">Felicitacion</b><p class="muted">Reconocimientos y buenas acciones.</p><b style="color:#b4475a">Alerta psicosocial</b><p class="muted">Aviso de seguimiento cuando se acumulan 3 o mas emociones negativas.</p></div></div></div>
+    <h3 style="margin-top:24px">Historial y acompañamiento</h3><p>El historial registra reuniones, seguimiento emocional y acuerdos. La seccion de atencion de la dupla muestra orientaciones y metas semanales para apoyar al estudiante desde el hogar.</p>
+    <div class="footer"><span>Perfil apoderado</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Perfil apoderado · comunidad</span>
+    <h2>Kudo Wall, clima e ideas</h2><div class="rule"></div>
+    <div class="grid2"><div><h3>Kudo Wall</h3><p>El apoderado puede consultar las medallas y reconocimientos del estudiante, junto con indicadores de colaboracion, participacion y empatia.</p><div class="grid3"><div class="card"><b>Colaboracion</b><br><span style="font-size:18pt;color:#6255c4">+50</span></div><div class="card"><b>Participacion</b><br><span style="font-size:18pt;color:#a17818">+30</span></div><div class="card"><b>Empatia</b><br><span style="font-size:18pt;color:#318155">+20</span></div></div></div><div><h3>Clima del curso</h3><p>La tendencia emocional permite comprender el contexto del curso sin exponer respuestas individuales.</p><table><tr><td>Critico</td><td>12%</td></tr><tr><td>Bajo</td><td>8%</td></tr><tr><td>Neutral</td><td>20%</td></tr><tr><td>Optimo</td><td>60%</td></tr></table></div></div>
+    <div class="card" style="margin-top:20px"><h3>Caja de Ideas</h3><p>Permite enviar propuestas a la comunidad y clasificarlas por <b>Bienestar, Convivencia, Academia o Familia</b>. El apoderado puede aportar ideas sobre espacios emocionales, habitos saludables, apoyo colectivo y actividades escolares.</p><div class="feature"><strong>Buenas practicas:</strong> describir una propuesta concreta, evitar datos personales innecesarios y seleccionar la categoria correcta.</div></div>
+    <div class="footer"><span>Perfil apoderado · Comunidad</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Flujos transversales</span>
+    <h2>Datos, alertas y moderacion</h2><div class="rule"></div>
+    <h3>Como circula la informacion</h3>
+    <div class="flow"><div class="step">Kiosco<br><small>emocion diaria</small></div><span class="arrow">→</span><div class="step">Docente<br><small>clima y lista</small></div><span class="arrow">→</span><div class="step">Dupla<br><small>seguimiento</small></div><span class="arrow">→</span><div class="step">Apoderado<br><small>acompanamiento</small></div></div>
+    <div class="grid2"><div class="card"><h3>Alerta psicosocial</h3><p>Cuando el registro emocional del alumno acumula <b>3 o mas emociones negativas</b>, se genera un aviso para revision de la dupla. La alerta no reemplaza la evaluacion profesional.</p></div><div class="card"><h3>Moderacion de Kudos</h3><p>Los Kudos entre estudiantes quedan pendientes hasta la autorizacion docente. Una vez aprobados, se reflejan en el muro y pueden sumar a metas del curso.</p></div></div>
+    <h3 style="margin-top:22px">Checklist de cierre</h3>
+    <ul><li>Docente: cerrar la toma de lista y revisar registros ocultos.</li><li>Dupla: documentar la accion y proxima fecha de seguimiento.</li><li>Directivo: revisar auditoria y consistencia de datos.</li><li>Todos: cerrar sesion y proteger la informacion observada.</li></ul>
+    <div class="callout green" style="margin-top:18px"><b>Principio de uso:</b> CONECTA PRO orienta decisiones de acompanamiento; las intervenciones deben respetar los protocolos del establecimiento y la normativa vigente.</div>
+    <div class="footer"><span>CONECTA PRO · Flujos transversales</span><span class="page-no">Pagina </span></div>
+  </section>
+
+  <section class="page">
+    <span class="section-tag">Referencia rapida</span>
+    <h2>Resumen de acciones por perfil</h2><div class="rule"></div>
+    <table><tr><th>Perfil</th><th>Puede consultar</th><th>Puede realizar</th></tr><tr><td><b>Docente</b></td><td>Clima, asistencia, lista, Kudos y recursos.</td><td>Habilitar kiosco, cerrar lista, reactivar registros, autorizar y enviar Kudos.</td></tr><tr><td><b>Estudiante</b></td><td>Medallas propias, avance del curso y Chat Estrella.</td><td>Registrar emocion, enviar Kudos e ideas.</td></tr><tr><td><b>Directivo</b></td><td>Datos institucionales, auditoria, alertas y reportes.</td><td>Cargar, editar, configurar y supervisar procesos.</td></tr><tr><td><b>Dupla psicosocial</b></td><td>Casos, riesgos, documentos y alertas restringidas.</td><td>Registrar atenciones, derivar, hacer seguimiento y cerrar casos.</td></tr><tr><td><b>Apoderado</b></td><td>Resumen, notificaciones, clima, medallas y atenciones.</td><td>Revisar comunicaciones y enviar ideas a la comunidad.</td></tr></table>
+    <div class="callout blue" style="margin-top:22px"><b>Soporte:</b> ante un problema de acceso, registro o sincronizacion, informar al administrador institucional indicando perfil, modulo, fecha y una descripcion breve del caso. No enviar claves ni datos sensibles por canales no autorizados.</div>
+    <p style="margin-top:35px;text-align:center;color:#59647c"><b>CONECTA PRO</b><br>Bienestar, convivencia y aprendizaje conectados.</p>
+    <div class="footer"><span>Documento de referencia funcional · 2026</span><span class="page-no">Pagina </span></div>
+  </section>
+</body>
+</html>

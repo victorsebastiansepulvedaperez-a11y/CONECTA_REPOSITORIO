@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./Login";
 import TeacherDashboard from "./TeacherDashboard";
 import TeacherDashboardV2 from "./TeacherDashboardV2";
@@ -916,17 +916,17 @@ export function ResponsiveNav({
         className={`fixed inset-0 z-40 md:hidden transition-opacity duration-300 ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
-        style={{ background: "rgba(17, 24, 39, 0.5)", backdropFilter: "blur(2px)" }}
+        style={{ background: "rgba(15, 23, 42, 0.62)", backdropFilter: "blur(4px)" }}
         onClick={close}
         aria-hidden="true"
       />
 
       {/* Drawer panel */}
       <aside
-        className={`fixed top-0 left-0 h-full z-50 md:hidden bg-white flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed top-0 left-0 h-full z-50 md:hidden bg-white/95 backdrop-blur-sm flex flex-col transition-transform duration-300 ease-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ width: 280, boxShadow: "4px 0 24px rgba(16,24,40,0.12)" }}
+        style={{ width: 280, boxShadow: "0 20px 50px rgba(15,23,42,0.18)" }}
         aria-label="Menú de navegación"
       >
         {/* Drawer header with close button */}
@@ -1475,6 +1475,26 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [appNavActive, setAppNavActive] = useState(0);
 
+  useEffect(() => {
+    const body = document.body;
+    body.style.overflow = mobileMenuOpen ? "hidden" : "";
+
+    return () => {
+      body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const roleToView: Record<DemoRole, AppView> = {
     docente: "dashboard",
     estudiante: "student",
@@ -1519,13 +1539,13 @@ export default function App() {
       <header className="sticky top-0 z-40">
         {/* Topbar con hamburger integrado */}
         <div
-          className="flex items-center gap-3 px-4 h-14 bg-white/95 backdrop-blur-md border-b border-[#E4E7F0]"
+          className="flex items-center gap-3 px-3 sm:px-4 h-14 bg-white/95 backdrop-blur-md border-b border-[#E4E7F0]"
           style={{ boxShadow: "0 1px 0 0 #E4E7F0" }}
         >
           {/* Hamburger — visible en mobile/tablet, oculto en desktop */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-[8px] text-[#374151] hover:bg-[#F1F3FA] transition-colors cursor-pointer shrink-0"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-[10px] text-[#374151] hover:bg-[#F1F3FA] active:bg-[#EEF2FF] transition-all duration-150 cursor-pointer shrink-0"
             aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={mobileMenuOpen}
           >

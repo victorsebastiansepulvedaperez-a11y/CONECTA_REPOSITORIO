@@ -1,0 +1,82 @@
+COPIA DE RESPALDO - CODIFICACIÓN ACTUAL
+=======================================
+Fecha: 2026-09-02
+Proyecto: CONECTA DEFINITIVO 2026
+
+Estado actual:
+- Layout base compartido funcional con menú responsive.
+- Header con buscador, usuario, inclusión, curso y nombre del perfil.
+- Sidebar desktop y drawer mobile.
+- Footer móvil con acceso rápido.
+- Opción cerrar sesión en menú.
+- Estructura centralizada en DashboardShell.tsx.
+- Dashboards por perfil con contenido placeholder para inyectar módulos reales.
+- Menús por perfil configurados con estructura actual.
+
+Archivos principales:
+- src/App.tsx
+- src/DashboardShell.tsx
+- src/StudentDashboard.tsx
+- src/TeacherDashboard.tsx
+- src/TeacherDashboardV2.tsx
+- src/DirectorDashboard.tsx
+- src/PsychoDashboard.tsx
+- src/ParentPortal.tsx
+- src/Login.tsx
+
+Estructura lógica actual del menú:
+
+Docente:
+- Dashboard
+- Asistencia
+  - 7°A
+  - 8°B
+- Kudos
+- Chat Estrella
+- Caja de Ideas
+
+Estudiante:
+- Dashboard
+- Medallas
+- Kudos
+- Ideas
+- Chat Estrella
+
+Director:
+- Dashboard
+- Carga de Datos
+- Carga manual de datos
+- Configuración
+- Detalle de Auditoría
+- Detalles por curso de alertas
+- Gestión de Reportes
+
+Psicosocial:
+- Casos
+- Seguimiento
+- Atenciones
+- Riesgos
+- Documentos
+- Alertas
+- Perfil
+
+Apoderado:
+- Resumen
+- Mi hijo
+- Asistencia
+- Calificaciones
+- Pagos
+- Mensajes
+- Perfil
+
+Notas técnicas:
+- Los cursos del docente están preparados para una lógica dinámica por catálogo mock.
+- La estructura está lista para evolucionar hacia carga por director y datos reales.
+- El proyecto compila con Vite y quedó en estado estable.
+
+Resumen de diseño:
+- Shell compartido para todos los perfiles.
+- El contenido real por módulo se debe insertar dentro de cada dashboard sin tocar el shell.
+- El objetivo es mantener una identidad visual común y solo cambiar el contenido interno y menús por perfil.
+
+Archivo de respaldo generado para recuperación rápida ante pérdida de cambios.
