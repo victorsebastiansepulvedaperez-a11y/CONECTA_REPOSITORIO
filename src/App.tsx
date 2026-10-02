@@ -6,6 +6,7 @@ import StudentDashboard from "./StudentDashboard";
 import DirectorDashboard from "./DirectorDashboard";
 import PsychoDashboard from "./PsychoDashboard";
 import ParentPortal from "./ParentPortal";
+import KioskPage from "./KioskPage";
 
 type DemoRole = "docente" | "estudiante" | "director" | "psi" | "apoderado";
 type AppView = "login" | "ds" | "dashboard" | "student" | "director" | "psycho" | "parent";
@@ -1494,6 +1495,21 @@ export default function App() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  if (window.location.pathname.startsWith("/kiosco/") || new URLSearchParams(window.location.search).has("kiosco")) {
+    return <KioskPage />;
+  }
+
+  const returnParams = new URLSearchParams(window.location.search);
+  if (returnParams.has("docente")) {
+    return (
+      <TeacherDashboard
+        onLogout={() => setView("login")}
+        initialCourse={returnParams.get("curso") ?? "7° Básico A"}
+        initialSessionId={returnParams.get("sesion") ?? undefined}
+      />
+    );
+  }
 
   const roleToView: Record<DemoRole, AppView> = {
     docente: "dashboard",
