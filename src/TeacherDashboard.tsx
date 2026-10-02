@@ -1,15 +1,6 @@
 ﻿import { useEffect, useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import { DashboardShell } from "./DashboardShell";
 import KudosPanel from "./KudosPanel";
-import {
-  createKioskSession,
-  createKioskUrl,
-  kioskMoods,
-  loadKioskSession,
-  saveKioskSession,
-  type KioskSession,
-} from "./kioskSession";
 
 const overviewStats = [
   { label: "Check-ins hoy", value: "23", icon: "👥" },
@@ -67,6 +58,49 @@ const videos = [
   { title: "Team Building", duration: "10 min", tag: "EQUIPO" },
 ];
 
+const attendanceRoster = [
+  { initials: "MR", name: "Mateo Rivera", status: "Registrado", emotion: "😊", time: "08:05 AM" },
+  { initials: "SC", name: "Sofía Carvajal", status: "Registrado", emotion: "🙂", time: "08:12 AM" },
+  { initials: "VS", name: "Valentina Soto", status: "Pendiente", emotion: "😐", time: "—" },
+  { initials: "AR", name: "Andrés Rojas", status: "Registrado", emotion: "😁", time: "08:18 AM" },
+  { initials: "CT", name: "Camila Torres", status: "Registrado", emotion: "😌", time: "08:19 AM" },
+  { initials: "JP", name: "Javier Peña", status: "Oculto", emotion: "🙂", time: "Guardado por error" },
+];
+
+const attendanceMoodBars = [
+  { label: "Crítico", value: "12%", tone: "bg-[#f4d380]" },
+  { label: "Bajo", value: "8%", tone: "bg-[#d7c7ff]" },
+  { label: "Neutral", value: "20%", tone: "bg-[#b4b7d8]" },
+  { label: "Óptimo", value: "60%", tone: "bg-[#c5b7f5]" },
+];
+
+const pedagogicalTips = [
+  {
+    title: "Prioridad alta",
+    type: "Derivación Psicosocial",
+    text: "Dada la prevalencia de estados críticos (>10%), se recomienda notificar a la dupla para una intervención focalizada.",
+    accent: "bg-[#e0bf69] text-[#1d1a1a]",
+  },
+  {
+    title: "Pausa activa",
+    type: "Respiración",
+    text: "Dinámica de 3 minutos para estabilizar la energía del grupo antes de la clase.",
+    accent: "bg-[#dbe1ff] text-[#1d2033]",
+  },
+  {
+    title: "Dinámica de gratitud",
+    type: "Cierre",
+    text: "Fomenta el clima positivo compartiendo un logro reciente con el compañero de al lado.",
+    accent: "bg-[#e5d8ff] text-[#1f1d2e]",
+  },
+  {
+    title: "Círculo de diálogo",
+    type: "Reflexión",
+    text: "Estructura de conversación para resolver tensiones latentes en el grupo.",
+    accent: "bg-[#cfe2ff] text-[#172133]",
+  },
+];
+
 type ParentIdea = {
   id: number;
   title: string;
@@ -77,20 +111,13 @@ type ParentIdea = {
   status: string;
 };
 
-export default function TeacherDashboard({
-  onLogout,
-  initialCourse,
-  initialSessionId,
-}: {
-  onLogout: () => void;
-  initialCourse?: string;
-  initialSessionId?: string;
-}) {
-  const [activeSection, setActiveSection] = useState(initialSessionId ? 1.1 : 0);
+export default function TeacherDashboard({ onLogout }: { onLogout: () => void }) {
+  const [activeSection, setActiveSection] = useState(0);
   const [ideaCategory, setIdeaCategory] = useState("Convivencia");
-  const [selectedCourse, setSelectedCourse] = useState(initialCourse ?? "7° Básico A");
-  const [session, setSession] = useState<KioskSession | null>(null);
-  const [confirmFinish, setConfirmFinish] = useState(false);
+  const [kioskOpen, setKioskOpen] = useState(false);
+  const [sessionKey, setSessionKey] = useState("CK-4F7A9M");
+  const [students, setStudents] = useState(attendanceRoster);
+  const [selectedCourse, setSelectedCourse] = useState("7° Básico A");
   const [parentIdeas, setParentIdeas] = useState<ParentIdea[]>([]);
 
   useEffect(() => {
@@ -115,109 +142,19 @@ export default function TeacherDashboard({
     }
   }, [activeSection]);
 
-  useEffect(() => {
-    if (initialSessionId) {
-      const existingSession = loadKioskSession(initialSessionId);
-      if (existingSession) {
-        setSession(existingSession);
-        return;
-      }
-    }
-    const nextSession = createKioskSession(selectedCourse);
-    saveKioskSession(nextSession);
-    setSession(nextSession);
-  }, [initialSessionId, selectedCourse]);
+  const attendanceStatus = students.filter((student) => student.status !== "Oculto").length;
 
-  useEffect(() => {
-    if (!session) return;
-    const syncSession = (event: StorageEvent) => {
-      if (event.key !== `conecta-kiosk-session:${session.id}`) return;
-      const updated = loadKioskSession(session.id);
-      if (updated) setSession(updated);
-    };
-    window.addEventListener("storage", syncSession);
-    return () => window.removeEventListener("storage", syncSession);
-  }, [session?.id]);
-
-  const students = session?.students ?? [];
-  const attendanceStatus = students.filter((student) => student.mood !== null).length;
-  const pendingStudents = students.length - attendanceStatus;
-  const recordedStudents = students.filter((student) => student.mood !== null);
-  const positiveCount = recordedStudents.filter((student) => student.mood === "Feliz" || student.mood === "Bien").length;
-  const tiredCount = recordedStudents.filter((student) => student.mood === "Cansado").length;
-  const criticalCount = recordedStudents.filter((student) => student.mood === "Triste" || student.mood === "Enojado").length;
-  const totalRecorded = recordedStudents.length;
-  const percentage = (count: number) => totalRecorded ? Math.round((count / totalRecorded) * 100) : 0;
-  const positivePercentage = percentage(positiveCount);
-  const moodSummary = [
-    { label: "Crítico", value: percentage(criticalCount), tone: "bg-[#f4d380]" },
-    { label: "Bajo", value: percentage(tiredCount), tone: "bg-[#d7c7ff]" },
-    { label: "Neutral", value: 0, tone: "bg-[#b4b7d8]" },
-    { label: "Óptimo", value: percentage(positiveCount), tone: "bg-[#c5b7f5]" },
-  ];
-  const currentPedagogicalTips = totalRecorded === 0
-    ? [{
-        title: "Esperando registros",
-        type: "Preparación",
-        text: "Al finalizar la toma de emociones, aquí aparecerán actividades sugeridas según el clima real del curso.",
-        accent: "bg-[#dbe1ff] text-[#1d2033]",
-      }]
-    : [
-        ...(criticalCount > 0 ? [{
-          title: "Acompañamiento cercano",
-          type: "Prioridad de bienestar",
-          text: `${criticalCount} estudiante${criticalCount === 1 ? " reportó tristeza o enojo" : "s reportaron tristeza o enojo"}. Propón una conversación privada y ofrece apoyo sin exponer a nadie frente al curso.`,
-          accent: "bg-[#e0bf69] text-[#1d1a1a]",
-        }] : []),
-        ...(tiredCount > 0 ? [{
-          title: "Pausa activa breve",
-          type: "Regulación de energía",
-          text: `${tiredCount} estudiante${tiredCount === 1 ? " reportó cansancio" : "s reportaron cansancio"}. Realiza una pausa de respiración y movimiento de 3 minutos antes de comenzar.`,
-          accent: "bg-[#dbe1ff] text-[#1d2033]",
-        }] : []),
-        {
-          title: positivePercentage >= 60 ? "Dinámica de gratitud" : "Círculo de diálogo",
-          type: "Actividad sugerida",
-          text: positivePercentage >= 60
-            ? "Aprovecha el buen clima para compartir un logro reciente y reconocer la colaboración entre compañeros."
-            : "Invita al curso a expresar qué necesita para sentirse acompañado, con participación voluntaria y escucha respetuosa.",
-          accent: "bg-[#e5d8ff] text-[#1f1d2e]",
-        },
-      ];
-
-  const startNewSession = () => {
-    const nextSession = createKioskSession(selectedCourse);
-    saveKioskSession(nextSession);
-    setSession(nextSession);
-    setConfirmFinish(false);
-  };
-
-  const finishSession = () => {
-    if (!session) return;
-    const nextSession = { ...session, status: "completed" as const, completedAt: new Date().toISOString() };
-    saveKioskSession(nextSession);
-    setSession(nextSession);
-    setConfirmFinish(false);
-  };
-
-  const reactivateStudent = (studentId: string) => {
-    if (!session) return;
-    const nextStudents = session.students.map((student) =>
-      student.id === studentId ? { ...student, mood: null, recordedAt: null } : student,
+  const toggleStudentStatus = (name: string) => {
+    setStudents((current) =>
+      current.map((student) =>
+        student.name === name
+          ? {
+              ...student,
+              status: student.status === "Oculto" ? "Registrado" : "Oculto",
+            }
+          : student,
+      ),
     );
-    const nextSession: KioskSession = {
-      ...session,
-      students: nextStudents,
-      status: "active",
-      completedAt: null,
-    };
-    saveKioskSession(nextSession);
-    setSession(nextSession);
-  };
-
-  const openKiosk = () => {
-    if (!session) return;
-    window.open(createKioskUrl(session), "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -603,126 +540,90 @@ export default function TeacherDashboard({
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-200/80">Profesor · Curso</div>
                 <h2 className="mt-2 text-3xl font-black tracking-[-0.06em] text-white">{selectedCourse}</h2>
-                <p className="mt-1 text-sm text-slate-300">
-                  Docente: Prof. Omar Lobos · {session?.status === "completed" ? "Sesión finalizada" : "Sesión activa"}
-                </p>
+                <p className="mt-1 text-sm text-slate-300">Docente: Prof. Omar Lobos · Sesión activa</p>
               </div>
 
-              <div className={`flex items-center gap-3 self-start rounded-full border px-3 py-2 text-sm font-medium ${session?.status === "completed" ? "border-slate-400/30 bg-slate-500/10 text-slate-200" : "border-emerald-400/30 bg-emerald-500/10 text-emerald-200"}`}>
-                <span className={`h-2.5 w-2.5 rounded-full ${session?.status === "completed" ? "bg-slate-400" : "bg-emerald-400"}`} aria-hidden="true" />
-                {session?.status === "completed" ? "Sesión finalizada" : "Sesión activa"}
+              <div className="flex items-center gap-3 self-start rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-200">
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                Sistema activo · {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
               </div>
             </div>
 
             <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)]">
               <div className="rounded-[24px] border border-white/10 bg-[#1d2333] p-4">
                 <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">QR del kiosco</div>
-                <div className="flex min-h-52 items-center justify-center rounded-[22px] border border-white/10 bg-white p-4">
-                  {session ? (
-                    <QRCodeSVG
-                      value={createKioskUrl(session)}
-                      size={184}
-                      level="H"
-                      marginSize={2}
-                      title={`Código QR del kiosco de ${selectedCourse}`}
-                    />
-                  ) : (
-                    <span className="text-sm text-slate-500">Preparando sesión…</span>
-                  )}
+                <div className="flex items-center justify-center rounded-[22px] border border-white/10 bg-white p-4">
+                  <div className="grid grid-cols-7 gap-[2px] bg-black p-2">
+                    {Array.from({ length: 49 }, (_, index) => (
+                      <span
+                        key={index}
+                        className={`h-3 w-3 ${index % 3 === 0 || (index + 3) % 7 === 0 || index % 11 === 0 ? "bg-black" : "bg-white"}`}
+                      />
+                    ))}
+                  </div>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center gap-2">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                   <button
                     type="button"
-                    onClick={openKiosk}
-                    disabled={!session || session.status === "completed"}
-                    className="min-h-11 rounded-xl border border-violet-300/30 bg-violet-500/10 px-4 py-2 text-sm font-semibold text-violet-100 transition hover:bg-violet-500/20 disabled:cursor-not-allowed disabled:opacity-40"
+                    onClick={() => setKioskOpen(true)}
+                    className="rounded-xl border border-violet-300/30 bg-violet-500/10 px-4 py-2 text-sm font-semibold text-violet-100 transition hover:bg-violet-500/20"
                   >
-                    Abrir kiosco
+                    Activar kiosko
                   </button>
-                  <button
-                    type="button"
-                    onClick={startNewSession}
-                    className="min-h-11 rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/5"
-                  >
-                    Generar nuevo QR
-                  </button>
-                  {session?.status === "active" ? (
+                  <span className="text-xs text-slate-400">Enlace: conecta.app/curso/{selectedCourse.replace(/\s+/g, "-").toLowerCase()}</span>
+                </div>
+
+                <div className="mt-4 rounded-xl border border-white/10 bg-[#131827] p-3 text-xs text-slate-300">
+                  <div className="mb-1 text-[10px] uppercase tracking-[0.18em] text-violet-200/80">Clave provisional</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-sm font-semibold text-white">{sessionKey}</span>
                     <button
                       type="button"
-                      onClick={() => setConfirmFinish(true)}
-                      className="min-h-11 rounded-xl bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-200 transition hover:bg-rose-500/25"
+                      onClick={() => setSessionKey(`CK-${Math.random().toString(36).slice(2, 8).toUpperCase()}`)}
+                      className="rounded-lg border border-white/10 px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-200 hover:bg-white/5"
                     >
-                      Finalizar pasado de lista
+                      Renovar
                     </button>
-                  ) : session ? (
-                    <span className="rounded-full border border-slate-400/20 bg-slate-500/10 px-3 py-2 text-xs font-semibold text-slate-300">
-                      Sesión cerrada
-                    </span>
-                  ) : null}
+                  </div>
                 </div>
-
-                {session ? (
-                  <div className="mt-4 rounded-xl border border-white/10 bg-[#131827] p-3 text-xs text-slate-300">
-                    <div className="mb-1 text-[10px] uppercase tracking-[0.18em] text-violet-200/80">Enlace único de esta sesión</div>
-                    <a className="break-all font-mono text-xs text-sky-200 underline decoration-sky-200/30 underline-offset-4" href={createKioskUrl(session)} target="_blank" rel="noreferrer">
-                      {createKioskUrl(session)}
-                    </a>
-                    <p className="mt-2 text-[11px] text-slate-400">El QR abre esta dirección en el dispositivo que lo escanee.</p>
-                  </div>
-                ) : null}
-
-                {confirmFinish ? (
-                  <div role="alertdialog" aria-modal="true" aria-label="Confirmar finalización" className="mt-4 rounded-xl border border-amber-300/20 bg-amber-500/10 p-4">
-                    <p className="text-sm font-semibold text-amber-100">¿Finalizar el pasado de lista?</p>
-                    <p className="mt-1 text-xs text-amber-100/70">Los estudiantes pendientes no podrán registrar su emoción hasta que el docente reactive a alguien o genere otra sesión.</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button type="button" onClick={finishSession} className="min-h-10 rounded-lg bg-rose-500 px-3 py-2 text-xs font-bold text-white hover:bg-rose-400">Sí, finalizar</button>
-                      <button type="button" onClick={() => setConfirmFinish(false)} className="min-h-10 rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-white/5">Seguir registrando</button>
-                    </div>
-                  </div>
-                ) : null}
-
-                <p className="mt-3 text-[11px] leading-5 text-slate-400">
-                  Prototipo: el registro queda guardado localmente en este navegador. La sincronización entre dispositivos se activará al conectar la base de datos.
-                </p>
               </div>
 
               <div className="rounded-[24px] border border-white/10 bg-[#1d2333] p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Clima del curso</div>
-                    <h3 className="mt-2 text-3xl font-black tracking-[-0.06em] text-white">{positivePercentage}% Positivo</h3>
-                    <p className="mt-1 text-sm text-slate-300">Basado en {totalRecorded} registros de esta sesión</p>
+                    <h3 className="mt-2 text-3xl font-black tracking-[-0.06em] text-white">74% Positivo</h3>
+                    <p className="mt-1 text-sm text-slate-300">Basado en 28 registros recientes</p>
                   </div>
                   <span className="rounded-full border border-violet-300/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-violet-100">
-                    {selectedCourse}
+                    2° Medio B
                   </span>
                 </div>
 
                 <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#2a2f46]">
                   <div className="flex h-full w-full">
-                    {moodSummary.map((bar) => (
+                    {attendanceMoodBars.map((bar) => (
                       <div
                         key={bar.label}
                         className={`${bar.tone} h-full`}
-                        style={{ width: `${bar.value}%` }}
+                        style={{ width: `${bar.label === "Óptimo" ? 60 : bar.label === "Neutral" ? 20 : bar.label === "Bajo" ? 8 : 12}%` }}
                       />
                     ))}
                   </div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-4 gap-3 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-200">
-                  {moodSummary.map((bar) => (
+                  {attendanceMoodBars.map((bar) => (
                     <div key={bar.label}>
-                      <div className="mb-2 text-[12px] font-bold text-white">{bar.value}%</div>
+                      <div className="mb-2 text-[12px] font-bold text-white">{bar.value}</div>
                       <div>{bar.label}</div>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-500/10 p-3 text-sm text-amber-100">
-                  <span className="font-bold">⚠</span> {criticalCount > 0 ? `${criticalCount} estudiante${criticalCount === 1 ? "" : "s"} reportaron tristeza o enojo. Revisa el recetario pedagógico.` : "Sin alertas emocionales críticas registradas en esta sesión."}
+                  <span className="font-bold">⚠</span> Alerta: se detecta un 12% de estado crítico. Se recomienda revisar el recetario pedagógico.
                 </div>
               </div>
             </div>
@@ -733,42 +634,38 @@ export default function TeacherDashboard({
               <div className="mb-4 flex items-center justify-between gap-3">
                 <h3 className="text-[2rem] font-black tracking-[-0.06em] text-white">Lista de Asistencia</h3>
                 <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-300">
-                  {attendanceStatus} registrados · {pendingStudents} pendientes
+                  {attendanceStatus} / {students.length} estudiantes
                 </span>
               </div>
 
               <div className="space-y-3">
                 {students.map((student) => (
                   <div
-                    key={student.id}
+                    key={student.name}
                     className="flex items-center justify-between gap-3 rounded-[18px] border border-white/10 bg-[#1d2333] p-3"
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#d9d2ff] via-[#8da2ff] to-[#7c6ae9] text-xs font-bold text-[#141827]">
-                        {student.name.split(/\s+/).map((part) => part[0]).slice(0, 2).join("").toUpperCase()}
+                        {student.initials}
                       </div>
 
                       <div className="min-w-0">
                         <div className="truncate text-base font-semibold text-white">{student.name}</div>
                         <div className="text-xs text-slate-400">
-                          {student.mood && student.recordedAt
-                            ? `Registrado ${new Date(student.recordedAt).toLocaleTimeString("es-CL", { hour: "2-digit", minute: "2-digit" })}`
-                            : "Pendiente de registro"}
+                          {student.status === "Registrado" ? `Registrado ${student.time}` : student.status === "Pendiente" ? "Pendiente de registro" : "Guardado por error"}
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <span className="inline-flex items-center rounded-full bg-[#2a2f46] px-2.5 py-1 text-xs font-semibold text-[#dfe7ff]">
-                        {student.mood
-                          ? `${kioskMoods.find((mood) => mood.label === student.mood)?.emoji ?? ""} ${student.mood}`
-                          : "Sin respuesta"}
+                        {student.emotion} {student.status === "Registrado" ? "Listo" : student.status === "Pendiente" ? "Sin respuesta" : "Oculto"}
                       </span>
 
-                      {student.mood ? (
+                      {student.status === "Oculto" ? (
                         <button
                           type="button"
-                          onClick={() => reactivateStudent(student.id)}
+                          onClick={() => toggleStudentStatus(student.name)}
                           className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition hover:bg-emerald-500/20"
                         >
                           Reactivar
@@ -787,7 +684,7 @@ export default function TeacherDashboard({
               </div>
 
               <div className="space-y-4">
-                {currentPedagogicalTips.map((tip) => (
+                {pedagogicalTips.map((tip) => (
                   <div key={tip.title} className="rounded-[20px] border border-white/10 bg-[#1d2333] p-4">
                     <div className="mb-3 flex items-center gap-3">
                       <div className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold ${tip.accent}`}>
@@ -805,6 +702,86 @@ export default function TeacherDashboard({
             </aside>
           </div>
 
+          {kioskOpen ? (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+              <div className="w-full max-w-6xl overflow-hidden rounded-[28px] border border-white/10 bg-[#11141d] shadow-[0_24px_80px_rgba(15,23,42,0.8)]">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-lg font-bold text-violet-200">C</div>
+                    <div>
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-violet-200/80">Sesión en vivo</div>
+                      <div className="text-2xl font-black tracking-[-0.05em] text-white">Kiosco de Registro</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setKioskOpen(false)}
+                    className="rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-200 hover:bg-white/5"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+
+                <div className="grid gap-6 p-5 xl:grid-cols-2">
+                  <div className="rounded-[24px] border border-white/10 bg-[#1d2333] p-5">
+                    <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Kiosco del curso</div>
+                    <div className="flex items-center justify-center rounded-[18px] border border-white/10 bg-white p-4">
+                      <div className="grid grid-cols-7 gap-[2px] bg-black p-2">
+                        {Array.from({ length: 49 }, (_, index) => (
+                          <span
+                            key={`qr-${index}`}
+                            className={`h-3 w-3 ${index % 2 === 0 || index % 9 === 0 ? "bg-black" : "bg-white"}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-center gap-3 rounded-xl border border-violet-300/20 bg-violet-500/10 px-3 py-2 text-sm text-violet-100">
+                      <span>◷</span>
+                      <span>Esperando conexiones...</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-[24px] border border-white/10 bg-[#1d2333] p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Clima grupal</div>
+                        <h3 className="mt-2 text-3xl font-black tracking-[-0.06em] text-white">74% Positivo</h3>
+                      </div>
+                      <span className="rounded-full border border-violet-300/20 bg-violet-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-violet-100">
+                        2° Medio B
+                      </span>
+                    </div>
+
+                    <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#2a2f46]">
+                      <div className="flex h-full w-full">
+                        {attendanceMoodBars.map((bar) => (
+                          <div
+                            key={`kiosk-${bar.label}`}
+                            className={`${bar.tone} h-full`}
+                            style={{ width: `${bar.label === "Óptimo" ? 60 : bar.label === "Neutral" ? 20 : bar.label === "Bajo" ? 8 : 12}%` }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-4 gap-3 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-200">
+                      {attendanceMoodBars.map((bar) => (
+                        <div key={`kiosk-label-${bar.label}`}>
+                          <div className="mb-2 text-[12px] font-bold text-white">{bar.value}</div>
+                          <div>{bar.label}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-500/10 p-3 text-sm text-amber-100">
+                      ⚠ Alerta: se detecta un 12% de estado crítico. Se recomienda revisar el recetario pedagógico.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : activeSection === 2 ? (
         <KudosPanel role="teacher" />
