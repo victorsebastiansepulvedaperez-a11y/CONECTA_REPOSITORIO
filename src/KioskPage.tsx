@@ -8,6 +8,14 @@ import {
   type KioskSession,
 } from "./kioskSession";
 
+const moodStyles: Record<KioskMood, string> = {
+  Feliz: "border-amber-200/15 bg-amber-300/[0.08] hover:border-amber-200/40 hover:bg-amber-300/[0.14]",
+  Bien: "border-emerald-200/15 bg-emerald-300/[0.08] hover:border-emerald-200/40 hover:bg-emerald-300/[0.14]",
+  Cansado: "border-sky-200/15 bg-sky-300/[0.08] hover:border-sky-200/40 hover:bg-sky-300/[0.14]",
+  Triste: "border-indigo-200/15 bg-indigo-300/[0.08] hover:border-indigo-200/40 hover:bg-indigo-300/[0.14]",
+  Enojado: "border-rose-200/15 bg-rose-300/[0.08] hover:border-rose-200/40 hover:bg-rose-300/[0.14]",
+};
+
 function createLinkedDemoSession(sessionId: string, course: string): KioskSession {
   return {
     id: sessionId,
@@ -126,33 +134,43 @@ export default function KioskPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#111015] text-[#eeeaf4]">
-      <header className="flex min-h-14 items-center justify-between gap-3 border-b border-white/[0.06] bg-[#17161c] px-4 sm:px-8">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-[#111015] text-[#eeeaf4]">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-32 -top-40 h-80 w-80 rounded-full bg-violet-500/[0.12] blur-3xl" />
+        <div className="absolute -right-32 top-1/3 h-96 w-96 rounded-full bg-indigo-500/[0.08] blur-3xl" />
+      </div>
+
+      <header className="relative flex min-h-16 items-center justify-between gap-3 border-b border-white/[0.07] bg-[#17161c]/80 px-4 backdrop-blur-xl sm:px-8">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#7354bd] text-lg font-bold text-white">C</div>
-          <strong className="truncate text-sm font-extrabold sm:text-base">CONECTA</strong>
-          <span className="hidden text-sm text-[#a8a3b2] sm:block">· Kiosco de bienestar</span>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-300 to-indigo-500 text-lg font-black text-[#171320] shadow-lg shadow-violet-950/30">C</div>
+          <div className="min-w-0">
+            <strong className="block truncate text-sm font-extrabold tracking-wide sm:text-base">CONECTA</strong>
+            <span className="block truncate text-[10px] font-medium text-[#a8a3b2] sm:text-xs">Kiosco de bienestar</span>
+          </div>
         </div>
-        <span className="flex shrink-0 items-center gap-2 text-xs text-emerald-200">
-          <i className="h-2 w-2 rounded-full bg-emerald-400" />
+        <span className={`flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-semibold sm:text-xs ${sessionFinished ? "border-slate-300/15 bg-white/[0.04] text-slate-300" : "border-emerald-300/15 bg-emerald-300/[0.07] text-emerald-200"}`}>
+          <i className={`h-2 w-2 rounded-full ${sessionFinished ? "bg-slate-400" : "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.65)]"}`} />
           Sesión {sessionFinished ? "finalizada" : "activa"}
         </span>
       </header>
 
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center px-4 pb-8 pt-8 sm:pt-12">
+      <main className="relative mx-auto flex w-full max-w-3xl flex-1 flex-col items-center px-4 pb-8 pt-8 sm:px-6 sm:pt-12">
         <div className="text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-200">{course}</p>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-[-0.06em] text-[#f3eff8] sm:text-5xl">
+          <p className="inline-flex items-center gap-2 rounded-full border border-violet-200/15 bg-violet-300/[0.07] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-violet-100 sm:text-xs">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-violet-300" />
+            {course}
+          </p>
+          <h1 className="mt-4 text-4xl font-extrabold tracking-[-0.06em] text-[#f8f5fc] sm:text-5xl">
             {sessionFinished ? "¡Gracias por participar!" : "¡Hola! 👋"}
           </h1>
-          <p className="mt-3 text-sm text-[#c7c1ce] sm:text-base">
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#c7c1ce] sm:text-base">
             {sessionFinished
               ? "El pasado de lista de este curso ya terminó."
               : "Busca tu nombre y cuéntanos cómo te sientes hoy."}
           </p>
         </div>
 
-        <section className="mt-8 w-full rounded-[28px] border border-white/[0.08] bg-[#1b1a20] p-5 shadow-[0_16px_44px_rgba(0,0,0,0.28)] sm:p-8">
+        <section className="mt-8 w-full rounded-[28px] border border-white/[0.09] bg-gradient-to-br from-[#211e29] via-[#1b1a20] to-[#181820] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.32)] sm:p-8">
           {sessionFinished ? (
             <div className="py-8 text-center">
               <span className="text-5xl">🌟</span>
@@ -197,8 +215,8 @@ export default function KioskPage() {
                 ))}
               </select>
 
-              <div className="mt-7 border-t border-white/[0.06] pt-6">
-                <p className="text-xs font-extrabold uppercase tracking-[0.13em] text-[#bca8e8]">
+              <div className="mt-7 border-t border-white/[0.08] pt-6">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.13em] text-[#d1bfff]">
                   ¿Cómo te sientes en este momento?
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -208,10 +226,10 @@ export default function KioskPage() {
                       type="button"
                       disabled={!selectedStudent}
                       onClick={() => recordMood(mood.label)}
-                      className="flex min-h-28 flex-col items-center justify-center gap-2 rounded-[20px] border border-white/[0.06] bg-[#27262c] px-2 transition hover:-translate-y-0.5 hover:border-[#8d7bb8] hover:bg-[#302b40] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-not-allowed disabled:opacity-40"
+                      className={`group flex min-h-28 flex-col items-center justify-center gap-2 rounded-[20px] border px-2 transition duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:translate-y-0 disabled:hover:shadow-none ${moodStyles[mood.label]}`}
                     >
-                      <span className="text-4xl" aria-hidden="true">{mood.emoji}</span>
-                      <span className="text-sm font-bold text-[#e9e4ed]">{mood.label}</span>
+                      <span className="text-4xl transition-transform duration-200 group-hover:scale-110" aria-hidden="true">{mood.emoji}</span>
+                      <span className="text-sm font-bold text-[#f0ecf5]">{mood.label}</span>
                     </button>
                   ))}
                 </div>
@@ -273,7 +291,7 @@ export default function KioskPage() {
         </p>
       </main>
 
-      <footer className="border-t border-white/[0.06] px-5 py-4 text-center text-[10px] font-semibold text-[#817b88]">
+      <footer className="relative border-t border-white/[0.06] bg-[#17161c]/60 px-5 py-4 text-center text-[10px] font-semibold tracking-wide text-[#817b88]">
         CONECTA · Kiosco de bienestar · Sesión segura
       </footer>
     </div>
